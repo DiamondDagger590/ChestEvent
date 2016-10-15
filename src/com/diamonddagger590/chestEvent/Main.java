@@ -29,7 +29,11 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 			if (args.length >= 1){
 				switch(args[0]){
 					case "register":
+						Commands.registerChest((Player) sender);
+						return true;
 						
+					case "unregister":
+						return true;
 				}
 			}
 	
