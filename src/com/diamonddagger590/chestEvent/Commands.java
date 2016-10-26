@@ -13,9 +13,13 @@ public class Commands {
 	public static ArrayList<String> chestUnregister = new ArrayList<String>();
 	
 	public static boolean registerChest(Player sender){
-		
+		//command format: /ce register {Name}
+		//allows player to register chest
 		String username = sender.getName().toString();
 		chestRegister.add(username);
+		
+		//write to file the name of the chest.
+		
 		
 		return true;
 	}
