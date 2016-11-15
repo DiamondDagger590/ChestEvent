@@ -1,0 +1,7 @@
+main: com.diamonddagger590.chestEvent.Main
+version: 0.5
+name: ChestEvent
+commands:
+  ce:
+    description: What ever this cmd does
+
