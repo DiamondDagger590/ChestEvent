@@ -3,5 +3,5 @@ version: 1.01
 name: ChestEvent
 commands:
   ce:
-    description: What ever this cmd does
+    description: The main command for the ChestEvent Plugin
 

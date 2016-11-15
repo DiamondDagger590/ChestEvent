@@ -2,8 +2,11 @@ package com.diamonddagger590.chestEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+
 
 public class Commands {
 	
@@ -38,7 +41,7 @@ public class Commands {
 			World w = Bukkit.getWorld(Main.listHandler.getChestLocation().getString("Locations." + name + ".world"));
 			Location loc1 = new Location(w, x, y + 1, z);
 			Location loc2 = new Location(w, x, y + 2, z);
-			if(loc1.getBlock()==null && loc2.getBlock()==null){
+			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
 				sender.sendMessage(Main.color("&bTeleporting you to " + name));
 				sender.teleport(loc1);
 			}
