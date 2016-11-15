@@ -12,12 +12,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-public class ListHandler {
+public class ListHandler { 
+	//create the listhandler info
 	static ListHandler instance = new ListHandler();
 
 	public static ListHandler getInstance() {
 		return instance;
 	}
+	//create files
 
 	Plugin p;
 
@@ -30,11 +32,13 @@ public class ListHandler {
 	
 	FileConfiguration players;
 	File pfile;
-	
+	//setup called in on enable
 	public void setup(Plugin p) {
+		//create a datafolder if it doesnt exist
 		if (!p.getDataFolder().exists()) {
 			p.getDataFolder().mkdir();
 		}
+		//create cfile if it doesnt exist
 		cfile = new File(p.getDataFolder(), "ChestLocation.yml");
 		if (!cfile.exists()) {
 			try{
@@ -45,8 +49,9 @@ public class ListHandler {
          		e.printStackTrace();
          	}
 		}
+		//save cfile to fileconfig type
 		ChestLocation = YamlConfiguration.loadConfiguration(cfile);
-		
+		//create pfile if it doesnt exist
 		pfile = new File(p.getDataFolder(), "Players.yml");
 		if (!pfile.exists()) {
 			try{
@@ -57,8 +62,9 @@ public class ListHandler {
          		e.printStackTrace();
          	}
 		}
+		//save pfile to a fileconfig type
 		players = YamlConfiguration.loadConfiguration(pfile);
-		
+		//create ifile if it doesnt exist
 		ifile = new File(p.getDataFolder(), "Items.yml");
 		if (!ifile.exists()) {
 			try{
@@ -69,10 +75,11 @@ public class ListHandler {
          		e.printStackTrace();
          	}
 		}
+		//save ifile to a fileconfig type
 		items = YamlConfiguration.loadConfiguration(ifile);
 		
 	}
-	//get each file
+	//create methods to get each file
 	public FileConfiguration getItems() {
 		return items;
 	}
@@ -82,7 +89,7 @@ public class ListHandler {
 	public FileConfiguration getPlayers() {
 		return players;
 	}
-	//save each file
+	//create methods to save each file
 	public void saveChestLocation() {
 		try {
 			ChestLocation.save(cfile);
@@ -107,6 +114,7 @@ public class ListHandler {
 					.severe(ChatColor.RED + "Could not save Name.yml!");
 		}
 	}
+	//create methods to reload fies
 	public void reloadChestLocation() {
 		ChestLocation = YamlConfiguration.loadConfiguration(cfile);
 	}
@@ -116,7 +124,7 @@ public class ListHandler {
 	public void reloadItems() {
 		items = YamlConfiguration.loadConfiguration(ifile);
 	}
-
+	//code BadBones69 told me to have or else it breaks xD
 	public PluginDescriptionFile getDesc() {
 		return p.getDescription();
 	}

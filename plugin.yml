@@ -1,5 +1,5 @@
 main: com.diamonddagger590.chestEvent.Main
-version: 0.5
+version: 1.01
 name: ChestEvent
 commands:
   ce:
