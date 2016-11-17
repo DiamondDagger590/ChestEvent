@@ -22,6 +22,7 @@ public class Main extends JavaPlugin{
 	public Main instance = this;
 	public File pluginFolder = instance.getDataFolder();
 	public static ListHandler listHandler = ListHandler.getInstance();
+
 	@Override
 	//when server boots up
 	public void onEnable(){
@@ -32,6 +33,8 @@ public class Main extends JavaPlugin{
 		Logger logger = Logger.getLogger("Minecraft");
 		logger.info(pdfFile.getName() + " Version " + pdfFile.getVersion() + " has been enabled.");
 		Bukkit.getServer().getPluginManager().registerEvents(new playerInteractEvent(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new InventoryMoveEvents(), this);
 
 	}
 	
@@ -95,6 +98,10 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							}
 						//if user types /ce register...
 						case "register":
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Main.color("&cOnly players can run this command"));
+								return true;
+							}
 						//if the user doesn't have permission ce.register
 							if(!sender.hasPermission("ce.register")){
 								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
@@ -153,36 +160,84 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							//TODO 
 							//if user types /ce items
 						case "items":
-							//if user doesn't have permission ce.items...
-							if(!sender.hasPermission("ce.items")){
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
-							}
-							//TODO
-
-							//if(args.length < 3){
-								//sender.sendMessage(Main.color("&cPlease use the format of /ce items register <ItemSetName>"));
-								//return true;
-							//}
-							else{
-								//create set with the itemset name as the itemset name... Kinda redundant eh?
-								InventoryManager.createItemSet((Player) sender, args[1]);
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Main.color("&cOnly players can run this command"));
 								return true;
 							}
+							if(args[1].equalsIgnoreCase("register")){
+								if(sender.hasPermission("ce.items.register") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*"))
+								//create set with the itemset name as the itemset name... Kinda redundant eh?
+									if(args.length < 3){
+										sender.sendMessage(Main.color("&cPlease use the format of "));
+										sender.sendMessage(Main.color("&c/ce items register/unregister/edit/view <ItemSetName>"));
+										return true;
+									}
+									else{
+										InventoryManager.createItemSet((Player) sender, args[2]);
+										return true;
+									}
+								else{
+									sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+									return true;
+								}
+							}
+							if(args[1].equalsIgnoreCase("unregister")){
+								if(sender.hasPermission("ce.items.unregister") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
+									if(args.length < 3){
+										sender.sendMessage(Main.color("&cPlease use the format of "));
+										sender.sendMessage(Main.color("&c/ce items register/unregister/edit/view <ItemSetName>"));
+										return true;
+									}
+									else{
+										Main.listHandler.getItems().set("Items." + args[2], null);
+										sender.sendMessage(Main.color("&aItem Set &e" + args[2] + " &ahas been unregistered!"));
+										Main.listHandler.saveItems();
+										return true;
+									}
+								}
+							
+							}
+							if(args[1].equalsIgnoreCase("view")){
+								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
+									InventoryManager.viewItemSet((Player) sender, args[2]);
+									return true;
+								}
+								else{
+									sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+								}
+							}
+							if(args[1].equalsIgnoreCase("edit")){
+								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
+									InventoryManager.editItemSet((Player) sender, args[2]);
+									return true;
+								}
+							}
+							
 						//if user types /ce unregister
 						case "unregister":
 							//if user doesn't have the permission ce.unregister...
-							if(!sender.hasPermission("ce.unregister")){
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
-								return true;
+							if(sender.hasPermission("ce.unregister") || sender.hasPermission("ce.*")){
+								if(!(Main.listHandler.getChestLocation().contains("Locations." + args[1]))){
+									sender.sendMessage(Main.color("&cThat chest is not registered."));
+									return true;
+								}
+								else{
+									Commands.unregisterChest(args[1]);
+									sender.sendMessage(Main.color("&aCongrats, &e" + args[1] + " &ahas been unregistered"));
+									return true;
+								}
 							}
 							else{
-
-								Commands.unregisterChest(args[1]);
-								sender.sendMessage(Main.color("&aCongrats, &e" + args[1] + " &ahas been unregistered"));
+								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
 								return true;
+								
 							}
 						//if user types /ce teleport...
 						case "teleport":
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Main.color("&cOnly players can run this command"));
+								return true;
+							}
 							//if user doesn't have permission ce.teleport
 							if(!sender.hasPermission("ce.teleport")){
 								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
@@ -196,29 +251,48 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							}
 						//if user types /ce help
 						case "help":
-							//if user doesn't have permission ce.help...
-							if(!sender.hasPermission("ce.help")){
+							//if user has permission ce.help...
+							if(sender.hasPermission("ce.help") || sender.hasPermission("ce.*")){
+								if(args.length == 1){
+									sender.sendMessage(Main.color("&e--------------------------"));
+									sender.sendMessage(Main.color("&3Register Command: /ce register <name> <cooldown> <ItemSet>"));
+									sender.sendMessage(Main.color("&3    -Registers the chest you are looking at with the name,   cooldown, and itemset provided"));
+									sender.sendMessage(Main.color("&3Unregister Command: /ce unregister <name>"));
+									sender.sendMessage(Main.color("&3    -Unregisters the specified chest"));
+									sender.sendMessage(Main.color("&3Teleport: /ce teleport <chestName>"));
+									sender.sendMessage(Main.color("&3    -Teleports you to the specified chest, names ARE case   sensitive"));
+									sender.sendMessage(Main.color("&3Reload Command: /ce reload"));
+									sender.sendMessage(Main.color("&3    -Reloads all files related to CE"));
+									sender.sendMessage(Main.color("&e/ce help 2 for more"));
+									sender.sendMessage(Main.color("&e---------------------------"));
+									return true;
+								}
+								
+								if(args[1].equalsIgnoreCase("2")){
+									sender.sendMessage(Main.color("&e---------------------------"));
+									sender.sendMessage(Main.color("&3Register Items: /ce items register <setName>"));
+									sender.sendMessage(Main.color("&3    -Creates a GUI for item registration"));
+									sender.sendMessage(Main.color("&3Unregister Items: /ce items unregister <setName>"));
+									sender.sendMessage(Main.color("&3    -Removes the specified itemset"));
+									sender.sendMessage(Main.color("&3View Items: /ce items view <setName>"));
+									sender.sendMessage(Main.color("&3    -Creates a GUI that shows all items in the itemset"));
+									sender.sendMessage(Main.color("&3Register Items: /ce items edit <setName>"));
+									sender.sendMessage(Main.color("&3    -Creates a GUI that allows you to edit the set"));
+									sender.sendMessage(Main.color("&e---------------------------"));
+								
+
+							}
+							}
+							else{
 								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
 								return true;
-							}
-							//send user the help guide
-							else{
-								sender.sendMessage(Main.color("&3Register Command: /ce register <name> <cooldown> <ItemSet>"));
-								sender.sendMessage(Main.color("&3    -Registers the chest you are looking at with the name, cooldown, and itemset provided"));
-								sender.sendMessage(Main.color("&3Unregister Command: /ce unregister <name>"));
-								sender.sendMessage(Main.color("&3    -Unregisters the specified chest"));
-								sender.sendMessage(Main.color("&3Register Items: /ce <setName>"));
-								sender.sendMessage(Main.color("&3    -Register items in your inventory as a set specified as the name provided"));
-								sender.sendMessage(Main.color("&3Teleport: /ce teleport <chestName>"));
-								sender.sendMessage(Main.color("&3    -Teleports you to the specified chest, names ARE case sensitive"));
-								sender.sendMessage(Main.color("&3Reload: /ce reload"));
-								sender.sendMessage(Main.color("&3    -Reloads all files for CE"));
+
 							}
 					}
 				}
 			else{
 				//prompt the user
-				sender.sendMessage("&3Do /ce help for commands");
+				sender.sendMessage(Main.color("&3Do /ce help for commands"));
 				return true;
 			}
 		}

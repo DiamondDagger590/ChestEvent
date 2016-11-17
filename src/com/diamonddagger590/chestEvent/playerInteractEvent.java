@@ -56,6 +56,7 @@ public class playerInteractEvent implements Listener{
 						//set the player
 						Main.listHandler.getPlayers().set("Players." + UUID + "." + name + ".cooldownExpire", cal.getTimeInMillis()-1);
 					}
+					if(e.getPlayer().hasPermission("ce.chestopen." + name) || e.getPlayer().hasPermission("ce.chestopen.*") || e.getPlayer().hasPermission("ce.*")){
 					//set the cooldownExpire time
 					Calendar cooldownExpire = Calendar.getInstance();
 					cooldownExpire.setTimeInMillis(Main.listHandler.getPlayers().getLong("Players." + UUID + "." + name + ".cooldownExpire"));
@@ -88,10 +89,15 @@ public class playerInteractEvent implements Listener{
 						int timeLeft = (int) (cooldownExpire.getTimeInMillis()/1000) - ((int) (cal.getTimeInMillis()/1000));
 						e.getPlayer().sendMessage(Main.color("&cYou can not open that chest until &a" + timeLeft + " &cseconds"));
 						return;
+						}
+					}
+					else{
+						e.setCancelled(true);
+						e.getPlayer().sendMessage(Main.color("&cYou don't have permission to open that chest."));
+						return;
 					}
 				}
 			}
 		}
-
 	}
 }
