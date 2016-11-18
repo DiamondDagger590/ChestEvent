@@ -102,13 +102,8 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								sender.sendMessage(Main.color("&cOnly players can run this command"));
 								return true;
 							}
-						//if the user doesn't have permission ce.register
-							if(!sender.hasPermission("ce.register")){
+							if(sender.hasPermission("ce.register") || sender.hasPermission("ce.*")){
 								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
-								return true;
-							}
-							//else
-							else{
 								//if there are less than 3 arguments, send a prompt message with correct format
 								if (args.length < 3){
 									sender.sendMessage(Main.color("&cPlease use the format /ce register <name> <cooldown> <ItemSet>"));
@@ -139,23 +134,29 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 									return true;
 								}
 								//if a chest has already been registered at that location
-								for(String name : Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false)){
-									//obtain the x, y, z, and world for each chest
-									int x = Main.listHandler.getChestLocation().getInt("Locations." + name + ".x");
-									int y = Main.listHandler.getChestLocation().getInt("Locations." + name + ".y");
-									int z = Main.listHandler.getChestLocation().getInt("Locations." + name + ".z");
-									World w = Bukkit.getWorld(Main.listHandler.getChestLocation().getString("Locations." + name + ".world"));
-									//if chest is in the file send a message
-									if(b.getLocation().equals(new Location(w, x, y, z))){
-										sender.sendMessage(Main.color("&cA chest has already been registered at that location, please try elsewhere."));
-										return true;
+								if(Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false)!= null){
+									for(String name : Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false)){
+										//obtain the x, y, z, and world for each chest
+										int x = Main.listHandler.getChestLocation().getInt("Locations." + name + ".x");
+										int y = Main.listHandler.getChestLocation().getInt("Locations." + name + ".y");
+										int z = Main.listHandler.getChestLocation().getInt("Locations." + name + ".z");
+										World w = Bukkit.getWorld(Main.listHandler.getChestLocation().getString("Locations." + name + ".world"));
+										//if chest is in the file send a message
+										if(b.getLocation().equals(new Location(w, x, y, z))){
+											sender.sendMessage(Main.color("&cA chest has already been registered at that location, please try elsewhere."));
+											return true;
+										}
 									}
 								}
+								
 								//register the chest
 								Commands.registerChest(args[1], b.getLocation(), Integer.parseInt(args[2]), args[3]);
 								//tell the user the chest was registered
 								sender.sendMessage(Main.color("&aCongrats, &e" + args[1] + " &ahas been registered"));
 								return true;
+							}
+							else{
+								sender.sendMessage(Main.color("&cYou don not have permission to run this command"));
 							}
 							//TODO 
 							//if user types /ce items
