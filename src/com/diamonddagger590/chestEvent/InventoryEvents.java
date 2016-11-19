@@ -31,7 +31,7 @@ public class InventoryEvents implements Listener{
 						}
 					}
 					Main.listHandler.getItems().set("Items." + itemSet + ".Reset", null);
-					Main.listHandler.getItems().set("Items." + itemSet + ".TotalItems", times);
+					Main.listHandler.getItems().set("Items." + itemSet + ".TotalItems", times+1);
 					times = 0;
 					Main.listHandler.saveItems();
 					Inventory playerinv = e.getPlayer().getInventory();

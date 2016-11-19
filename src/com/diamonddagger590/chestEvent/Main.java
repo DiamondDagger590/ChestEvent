@@ -45,7 +45,7 @@ public class Main extends JavaPlugin{
 		logger.info(pdfFile.getName() + " Version " + pdfFile.getVersion() + " has been disabled.");
 	}
 	//method to check if a string is an integer
-	boolean isInt(String s) {
+	static boolean isInt(String s) {
 		  try {
 		    Integer.parseInt(s);
 		  } catch (NumberFormatException nfe) {
@@ -240,16 +240,17 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								return true;
 							}
 							//if user doesn't have permission ce.teleport
-							if(!sender.hasPermission("ce.teleport")){
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
-								return true;
-							}
-							
-							else{
+
+							else if(sender.hasPermission("ce.teleport.*") || sender.hasPermission("ce.teleport." + args[1]) || sender.hasPermission("ce.*")){
 								//CASE SENSITIVE
 							Commands.teleportToCrate((Player) sender, args[1]);
 							return true;
 							}
+							else{
+								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+								return true;
+							}
+							
 						//if user types /ce help
 						case "help":
 							//if user has permission ce.help...
@@ -279,7 +280,12 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 									sender.sendMessage(Main.color("&3    -Creates a GUI that shows all items in the itemset"));
 									sender.sendMessage(Main.color("&3Register Items: /ce items edit <setName>"));
 									sender.sendMessage(Main.color("&3    -Creates a GUI that allows you to edit the set"));
+									sender.sendMessage(Main.color("&3List locations: /ce list"));
+									sender.sendMessage(Main.color("&3    -Lists all locations you are allowed to open"));
+									sender.sendMessage(Main.color("&3Cooldown: /ce cooldown <target> <cooldown> <chest>"));
+									sender.sendMessage(Main.color("&3    -Change the targets cooldown for specified chest by the amount inputed in seconds from now"));
 									sender.sendMessage(Main.color("&e---------------------------"));
+									return true;
 								
 
 							}
@@ -289,6 +295,19 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								return true;
 
 							}
+						case "list":
+							Commands.listCrates((Player) sender);
+							return true;
+						case "cooldown":
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Main.color("&cConsoles can not run this command as of now"));
+								return true;
+							}
+							else{
+								Commands.cooldownSet((Player) sender, args[1], args[2], args[3]);
+								return true;
+							}
+							
 					}
 				}
 			else{
