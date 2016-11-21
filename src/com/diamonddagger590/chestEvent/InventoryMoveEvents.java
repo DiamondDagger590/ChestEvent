@@ -13,7 +13,6 @@ public class InventoryMoveEvents implements Listener{
 	    public void onInventoryClick(InventoryClickEvent e) {
 	      Player player = (Player) e.getWhoClicked();
 	      Inventory inv = e.getInventory();
-	      String invName = inv.getTitle();
 	      for(String itemSet : Main.listHandler.getItems().getConfigurationSection("Items").getKeys(false))
 	        if(ChatColor.stripColor(inv.getTitle()).equalsIgnoreCase("Viewing ItemSet: " + itemSet)) {
 	                          e.setCancelled(true);

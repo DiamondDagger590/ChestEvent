@@ -36,12 +36,12 @@ public class Commands {
 	}
 	public static void listCrates(Player sender){
 		if(Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false) == null){
-			sender.sendMessage(Main.color("&cThere are no chests registered"));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThere are no chests registered"));
 			return;
 		}
 		else{
+			sender.sendMessage(Main.color("&&7[&1ChestEvent&7]&6>>3&lThe chests you are allowed to open are:"));
 			for(String name: Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false)){
-				sender.sendMessage(Main.color("&3&lThe chests you are allowed to open are:"));
 				if(sender.hasPermission("ce.chestopen.*") || sender.hasPermission("ce.*") || sender.hasPermission("ce.chestopen." + name)){
 					sender.sendMessage(Main.color("&e----------------------------"));
 					sender.sendMessage(Main.color("&3    " + name));
@@ -60,41 +60,41 @@ public class Commands {
 			Location loc1 = new Location(w, x, y + 1, z);
 			Location loc2 = new Location(w, x, y + 2, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&bTeleporting you to " + name));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x + 1, y, z);
 			loc2 = new Location(w, x + 1, y + 1, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&bTeleporting you to " + name));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x - 1, y, z);
 			loc2 = new Location(w, x - 1, y + 1, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&bTeleporting you to " + name));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x, y, z + 1);
 			loc2 = new Location(w, x, y + 1, z + 1);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&bTeleporting you to " + name));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x, y, z - 1);
 			loc2 = new Location(w, x, y + 1, z - 1);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&bTeleporting you to " + name));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
 				sender.teleport(loc1);
 				return;
 			}
 			//if there are blocks above the chest
 			else{
-				sender.sendMessage(Main.color("&cThere are blocks blocking the chest."));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThere are blocks blocking the chest."));
 				sender.sendMessage(Main.color("&cHere are the coords."));
 				sender.sendMessage(Main.color("&e--------------------------------------"));
 				sender.sendMessage(Main.color("&eX: &a" + x));
@@ -107,33 +107,33 @@ public class Commands {
 		}
 		//error msg
 		else{
-			sender.sendMessage(Main.color("&3The chest " + name + " is not registered. If you believe this to be an error please contact an admin or dev"));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThe chest " + name + " is not registered. If you believe this to be an error please contact an admin or dev"));
 			return;
 		}
 	}
 	@SuppressWarnings("deprecation")
 	public static void cooldownSet(Player sender, String target, String cooldown, String chest){
 		if(!(sender.hasPermission("ce.cooldowns"))){
-			sender.sendMessage(Main.color("&cYou do not have permission to run this command"));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cYou do not have permission to run this command"));
 			return;
 		}
 		else if((Bukkit.getPlayer(target)) == null){
-			sender.sendMessage(Main.color("&cThat player doesn't exist or is not online."));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat player doesn't exist or is not online."));
 			return;
 		}
 		Player player = Bukkit.getPlayer(target);
 		if(Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false) == null){
-			sender.sendMessage(Main.color("&cThere are no registered chests."));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThere are no registered chests."));
 			return;
 		}
 		else if(!Main.listHandler.getPlayers().contains("Players." + player.getUniqueId())){
-			sender.sendMessage(Main.color("That player is not registered or does not exist"));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat player is not registered or does not exist"));
 			return;
 		}
 		else if(Main.listHandler.getPlayers().contains("Players." + player.getUniqueId())){
 			if(Main.listHandler.getPlayers().contains("Players." + player.getUniqueId() + "." + chest + ".cooldownExpire")){
 				if(!Main.isInt(cooldown)){
-					sender.sendMessage(Main.color("&cPlease use the format of /ce cooldown <target> <cooldown> <chest>"));
+					sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cPlease use the format of /ce cooldown <target> <cooldown> <chest>"));
 					return;
 				}
 				else{
@@ -142,19 +142,19 @@ public class Commands {
 					Calendar cal = Calendar.getInstance();
 					cal.add(Calendar.SECOND, cool);
 					int timeLeft = (int) (cal.getTimeInMillis()/1000) - ((int) (current.getTimeInMillis()/1000));
-					sender.sendMessage(Main.color("&a" + target + "s cooldown has been set to &e" + timeLeft + "&a from now."));
+					sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&a" + target + "s cooldown has been set to &e" + timeLeft + "&a from now."));
 					Main.listHandler.getPlayers().set("Players." + player.getUniqueId() + "." + chest + ".cooldownExpire", cal.getTimeInMillis());
 					Main.listHandler.savePlayers();
 					return;
 				}
 			}
 			else{
-				sender.sendMessage(Main.color("&e" + chest + "&c is not registered for &e" + target));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&e" + chest + "&c is not registered for &e" + target));
 				return;
 			}
 		}
 		else{
-			sender.sendMessage(Main.color("&cWell... if you made it to this point I really screwed up"));
+			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cWell... if you made it to this point I really screwed up"));
 			return;
 		}
 		

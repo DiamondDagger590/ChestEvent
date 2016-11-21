@@ -85,7 +85,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 						case "reload":
 							//if user doesnt have permission ce.reload, send them a message
 							if(!sender.hasPermission("ce.reload")){
-								sender.sendMessage(Main.color("&cYou do not have permissions to run that command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 								return true;
 							}
 							//else reload all files and send a message
@@ -93,44 +93,43 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								Main.listHandler.reloadChestLocation();
 								Main.listHandler.reloadItems();
 								Main.listHandler.reloadPlayers();
-								sender.sendMessage(Main.color("&aAll ChestEvent files are now reloaded!"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Reload")));
 								return true;
 							}
 						//if user types /ce register...
 						case "register":
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Main.color("&cOnly players can run this command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.OnlyPlayer")));
 								return true;
 							}
-							if(sender.hasPermission("ce.register") || sender.hasPermission("ce.*")){
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+							if((sender.hasPermission("ce.register") || sender.hasPermission("ce.*"))){
 								//if there are less than 3 arguments, send a prompt message with correct format
 								if (args.length < 3){
-									sender.sendMessage(Main.color("&cPlease use the format /ce register <name> <cooldown> <ItemSet>"));
-									sender.sendMessage(Main.color("&cPlease register an item set before a chest to avoid errors!"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.RegisterPrompt1")));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.RegisterPrompt2")));
 									return true;
 								}
 							
 								//get the block the player is looking at
-								Block b = ((Player) sender).getTargetBlock((HashSet<Byte>)null, 7);
+								Block b = ((Player) sender).getTargetBlock((HashSet<Byte>)null, Main.listHandler.getConfig().getInt("Config.MaxRegisterDistance"));
 								//if the second argument isn't an int
 								if(!isInt(args[2])){
-									sender.sendMessage(Main.color("&cPlease use the format of &4/ce register <name> <cooldown> <ItemSet> &cwhere cooldown is an int."));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotAnInt")));
 									return true;
 								}
 								//if there is no block
 								if(b.isEmpty()){
-									sender.sendMessage(Main.color("&cYou need to be looking at a block at most 7 blocks away"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.TooFar").replaceAll("%Distance%", Main.listHandler.getConfig().getString("Config.MaxRegisterDistance"))));
 									return true;
 								}
 								//if the user isnt looking at a chest
 								if(b.getType() != Material.CHEST){
-									sender.sendMessage(Main.color("&cYou need to be looking at a chest"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotAChest")));
 									return true;
 								}
 								//if the chest name has already been used
 								if(Main.listHandler.getChestLocation().contains("Locations." + args[1])){
-									sender.sendMessage(Main.color("&cThe name " + Main.color("&e" + args[1]) + Main.color(" &chas already been used. Please use a different name")));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ChestNameAlreadyUsed").replaceAll("%ChestName%", args[1])));
 									return true;
 								}
 								//if a chest has already been registered at that location
@@ -143,7 +142,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 										World w = Bukkit.getWorld(Main.listHandler.getChestLocation().getString("Locations." + name + ".world"));
 										//if chest is in the file send a message
 										if(b.getLocation().equals(new Location(w, x, y, z))){
-											sender.sendMessage(Main.color("&cA chest has already been registered at that location, please try elsewhere."));
+											sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.LocationAlreadyUsed")));
 											return true;
 										}
 									}
@@ -152,25 +151,25 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								//register the chest
 								Commands.registerChest(args[1], b.getLocation(), Integer.parseInt(args[2]), args[3]);
 								//tell the user the chest was registered
-								sender.sendMessage(Main.color("&aCongrats, &e" + args[1] + " &ahas been registered"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.SuccessfulRegister").replaceAll("%ChestName%", args[1])));
 								return true;
 							}
 							else{
-								sender.sendMessage(Main.color("&cYou don not have permission to run this command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 							}
 							//TODO 
 							//if user types /ce items
 						case "items":
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Main.color("&cOnly players can run this command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.OnlyPlayer")));
 								return true;
 							}
 							if(args[1].equalsIgnoreCase("register")){
 								if(sender.hasPermission("ce.items.register") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*"))
 								//create set with the itemset name as the itemset name... Kinda redundant eh?
 									if(args.length < 3){
-										sender.sendMessage(Main.color("&cPlease use the format of "));
-										sender.sendMessage(Main.color("&c/ce items register/unregister/edit/view <ItemSetName>"));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemPrompt2")));
 										return true;
 									}
 									else{
@@ -178,20 +177,20 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 										return true;
 									}
 								else{
-									sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 									return true;
 								}
 							}
 							if(args[1].equalsIgnoreCase("unregister")){
 								if(sender.hasPermission("ce.items.unregister") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
 									if(args.length < 3){
-										sender.sendMessage(Main.color("&cPlease use the format of "));
-										sender.sendMessage(Main.color("&c/ce items register/unregister/edit/view <ItemSetName>"));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemPrompt2")));
 										return true;
 									}
 									else{
 										Main.listHandler.getItems().set("Items." + args[2], null);
-										sender.sendMessage(Main.color("&aItem Set &e" + args[2] + " &ahas been unregistered!"));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.SuccessfulItemRegister")));
 										Main.listHandler.saveItems();
 										return true;
 									}
@@ -200,17 +199,31 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							}
 							if(args[1].equalsIgnoreCase("view")){
 								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
-									InventoryManager.viewItemSet((Player) sender, args[2]);
-									return true;
+									if(args.length < 3){
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Main.ItemPrompt2")));
+										return true;
+									}
+									else{
+										InventoryManager.viewItemSet((Player) sender, args[2]);
+										return true;
+									}
 								}
 								else{
-									sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 								}
 							}
 							if(args[1].equalsIgnoreCase("edit")){
 								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
-									InventoryManager.editItemSet((Player) sender, args[2]);
-									return true;
+									if(args.length < 3){
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Main.ItemPrompt2")));
+										return true;
+									}
+									else{
+										InventoryManager.editItemSet((Player) sender, args[2]);
+										return true;
+									}
 								}
 							}
 							
@@ -219,24 +232,24 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							//if user doesn't have the permission ce.unregister...
 							if(sender.hasPermission("ce.unregister") || sender.hasPermission("ce.*")){
 								if(!(Main.listHandler.getChestLocation().contains("Locations." + args[1]))){
-									sender.sendMessage(Main.color("&cThat chest is not registered."));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotRegisteredChest")));
 									return true;
 								}
 								else{
 									Commands.unregisterChest(args[1]);
-									sender.sendMessage(Main.color("&aCongrats, &e" + args[1] + " &ahas been unregistered"));
+									sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aCongrats, &e" + args[1] + " &ahas been unregistered"));
 									return true;
 								}
 							}
 							else{
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 								return true;
 								
 							}
 						//if user types /ce teleport...
 						case "teleport":
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Main.color("&cOnly players can run this command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.OnlyPlayer")));
 								return true;
 							}
 							//if user doesn't have permission ce.teleport
@@ -247,7 +260,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							return true;
 							}
 							else{
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 								return true;
 							}
 							
@@ -257,13 +270,13 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							if(sender.hasPermission("ce.help") || sender.hasPermission("ce.*")){
 								if(args.length == 1){
 									sender.sendMessage(Main.color("&e--------------------------"));
-									sender.sendMessage(Main.color("&3Register Command: /ce register <name> <cooldown> <ItemSet>"));
+									sender.sendMessage(Main.color("&7[&6Register Command&7]&3 /ce register <name> <cooldown> <ItemSet>"));
 									sender.sendMessage(Main.color("&3    -Registers the chest you are looking at with the name,   cooldown, and itemset provided"));
-									sender.sendMessage(Main.color("&3Unregister Command: /ce unregister <name>"));
+									sender.sendMessage(Main.color("&7[&6Unregister Command&7]&3 /ce unregister <name>"));
 									sender.sendMessage(Main.color("&3    -Unregisters the specified chest"));
-									sender.sendMessage(Main.color("&3Teleport: /ce teleport <chestName>"));
+									sender.sendMessage(Main.color("&7[&6Teleport&7]&3 /ce teleport <chestName>"));
 									sender.sendMessage(Main.color("&3    -Teleports you to the specified chest, names ARE case   sensitive"));
-									sender.sendMessage(Main.color("&3Reload Command: /ce reload"));
+									sender.sendMessage(Main.color("&7[&6Reload Command&7]&3 /ce reload"));
 									sender.sendMessage(Main.color("&3    -Reloads all files related to CE"));
 									sender.sendMessage(Main.color("&e/ce help 2 for more"));
 									sender.sendMessage(Main.color("&e---------------------------"));
@@ -272,17 +285,17 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								
 								if(args[1].equalsIgnoreCase("2")){
 									sender.sendMessage(Main.color("&e---------------------------"));
-									sender.sendMessage(Main.color("&3Register Items: /ce items register <setName>"));
+									sender.sendMessage(Main.color("&7[&6Register Items&7]&3 /ce items register <setName>"));
 									sender.sendMessage(Main.color("&3    -Creates a GUI for item registration"));
-									sender.sendMessage(Main.color("&3Unregister Items: /ce items unregister <setName>"));
+									sender.sendMessage(Main.color("&7[&6Unregister Items&7]&3 /ce items unregister <setName>"));
 									sender.sendMessage(Main.color("&3    -Removes the specified itemset"));
-									sender.sendMessage(Main.color("&3View Items: /ce items view <setName>"));
+									sender.sendMessage(Main.color("&7[&6View Items&7]&3 /ce items view <setName>"));
 									sender.sendMessage(Main.color("&3    -Creates a GUI that shows all items in the itemset"));
-									sender.sendMessage(Main.color("&3Register Items: /ce items edit <setName>"));
+									sender.sendMessage(Main.color("&7[&6Register Items&7]&3 /ce items edit <setName>"));
 									sender.sendMessage(Main.color("&3    -Creates a GUI that allows you to edit the set"));
-									sender.sendMessage(Main.color("&3List locations: /ce list"));
+									sender.sendMessage(Main.color("&7[&6List locations&7]&3 /ce list"));
 									sender.sendMessage(Main.color("&3    -Lists all locations you are allowed to open"));
-									sender.sendMessage(Main.color("&3Cooldown: /ce cooldown <target> <cooldown> <chest>"));
+									sender.sendMessage(Main.color("&7[&6Cooldown&7]&3 /ce cooldown <target> <cooldown> <chest>"));
 									sender.sendMessage(Main.color("&3    -Change the targets cooldown for specified chest by the amount inputed in seconds from now"));
 									sender.sendMessage(Main.color("&e---------------------------"));
 									return true;
@@ -291,7 +304,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							}
 							}
 							else{
-								sender.sendMessage(Main.color("&cYou do not have permission to run that command"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 								return true;
 
 							}
@@ -300,7 +313,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 							return true;
 						case "cooldown":
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Main.color("&cConsoles can not run this command as of now"));
+								sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.OnlyPlayer")));
 								return true;
 							}
 							else{
@@ -312,7 +325,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 				}
 			else{
 				//prompt the user
-				sender.sendMessage(Main.color("&3Do /ce help for commands"));
+				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&3Do /ce help for commands"));
 				return true;
 			}
 		}

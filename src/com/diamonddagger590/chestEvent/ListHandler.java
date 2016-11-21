@@ -22,6 +22,8 @@ public class ListHandler {
 	//create files
 
 	Plugin p;
+	FileConfiguration config;
+	File configfile;
 
 	FileConfiguration ChestLocation;
 	File cfile;
@@ -51,6 +53,17 @@ public class ListHandler {
 		}
 		//save cfile to fileconfig type
 		ChestLocation = YamlConfiguration.loadConfiguration(cfile);
+		configfile = new File(p.getDataFolder(), "config.yml");
+		if (!cfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/config.yml");
+         		InputStream E = getClass().getResourceAsStream("/config.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		config = YamlConfiguration.loadConfiguration(configfile);
 		//create pfile if it doesnt exist
 		pfile = new File(p.getDataFolder(), "Players.yml");
 		if (!pfile.exists()) {
@@ -80,6 +93,9 @@ public class ListHandler {
 		
 	}
 	//create methods to get each file
+	public FileConfiguration getConfig(){
+		return config;
+	}
 	public FileConfiguration getItems() {
 		return items;
 	}
@@ -90,6 +106,15 @@ public class ListHandler {
 		return players;
 	}
 	//create methods to save each file
+	public void saveConfig(){
+		try {
+			config.save(configfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save config.yml!");
+		}
+	}
+	
 	public void saveChestLocation() {
 		try {
 			ChestLocation.save(cfile);
@@ -111,10 +136,13 @@ public class ListHandler {
 			players.save(pfile);
 		} catch (IOException e) {
 			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save Name.yml!");
+					.severe(ChatColor.RED + "Could not save Players.yml!");
 		}
 	}
 	//create methods to reload fies
+	public void reloadConfig(){
+		config = YamlConfiguration.loadConfiguration(configfile);
+	}
 	public void reloadChestLocation() {
 		ChestLocation = YamlConfiguration.loadConfiguration(cfile);
 	}
