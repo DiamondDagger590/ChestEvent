@@ -15,36 +15,36 @@
 ###########################
 Config:
 ####How far a player can be to register a chest in blocks
-    MaxRegisterDistance: '7'
+  MaxRegisterDistance: '7'
 PluginPrefix: '&7[&1ChestEvent&7]&6>>'
 Messages:
-    NoPerms: '&cYou do not have permission to run that command.'
+  NoPerms: '&cYou do not have permission to run that command.'
     
-    Reload: '&aAll ChestEvent files are now reloaded!'
+  Reload: '&aAll ChestEvent files are now reloaded!'
     
-    OnlyPlayers: '&cOnly players can run this command'
+  OnlyPlayers: '&cOnly players can run this command'
     
-    RegisterPrompt1: '&cPlease use the format /ce register <name> <cooldown> <ItemSet>'
+  RegisterPrompt1: '&cPlease use the format /ce register <name> <cooldown> <ItemSet>'
+   
+  RegisterPrompt2: '&cPlease register an item set before a chest to avoid errors!'
     
-    RegisterPrompt2: '&cPlease register an item set before a chest to avoid errors!'
+  NotAnInt: '&cPlease use the format of &4/ce register <name> <cooldown> <ItemSet> &cwhere cooldown is an int.'
     
-    NotAnInt: '&cPlease use the format of &4/ce register <name> <cooldown> <ItemSet> &cwhere cooldown is an int.'
+  TooFar: '&cYou need to be looking at a block at most %Distance& blocks away.'
     
-    TooFar: '&cYou need to be looking at a block at most %Distance& blocks away.'
+  NotAChest: '&cYou need to be looking at a chest'
     
-    NotAChest: '&cYou need to be looking at a chest'
+  ChestNameAlreadyUsed: '&cThe name &e%ChestName% &chas already been used. Please use a different name'
+   
+  LocationAlreadyUsed: '&cA chest has already been registered at that location, please try elsewhere.'
     
-    ChestNameAlreadyUsed: '&cThe name &e%ChestName% &chas already been used. Please use a different name'
+  NotRegisteredChest: '&cThat chest is not registered.'
     
-    LocationAlreadyUsed: '&cA chest has already been registered at that location, please try elsewhere.'
+  SuccessfulRegister: '&aCongrats, &e%ChestName% &ahas been registered'
     
-    NotRegisteredChest: '&cThat chest is not registered.'
+  ItemsPrompt1: '&cPlease use the format of'
     
-    SuccessfulRegister: '&aCongrats, &e%ChestName% &ahas been registered'
-    
-    ItemsPrompt1: '&cPlease use the format of'
-    
-    ItemsPrompt2: '&c/ce items register/unregister/edit/view <ItemSetName>'
+  ItemsPrompt2: '&c/ce items register/unregister/edit/view <ItemSetName>'
     
     SuccessfulItemUnregister: '&aItem Set &e%ItemSet% &ahas been unregistered!'
     
