@@ -19,33 +19,17 @@ Config:
 PluginPrefix: '&7[&1ChestEvent&7]&6>>'
 Messages:
   NoPerms: '&cYou do not have permission to run that command.'
-    
   Reload: '&aAll ChestEvent files are now reloaded!'
-    
   OnlyPlayers: '&cOnly players can run this command'
-    
   RegisterPrompt1: '&cPlease use the format /ce register <name> <cooldown> <ItemSet>'
-   
   RegisterPrompt2: '&cPlease register an item set before a chest to avoid errors!'
-    
   NotAnInt: '&cPlease use the format of &4/ce register <name> <cooldown> <ItemSet> &cwhere cooldown is an int.'
-    
   TooFar: '&cYou need to be looking at a block at most %Distance& blocks away.'
-    
   NotAChest: '&cYou need to be looking at a chest'
-    
   ChestNameAlreadyUsed: '&cThe name &e%ChestName% &chas already been used. Please use a different name'
-   
   LocationAlreadyUsed: '&cA chest has already been registered at that location, please try elsewhere.'
-    
   NotRegisteredChest: '&cThat chest is not registered.'
-    
   SuccessfulRegister: '&aCongrats, &e%ChestName% &ahas been registered'
-    
   ItemsPrompt1: '&cPlease use the format of'
-    
   ItemsPrompt2: '&c/ce items register/unregister/edit/view <ItemSetName>'
-    
-    SuccessfulItemUnregister: '&aItem Set &e%ItemSet% &ahas been unregistered!'
-    
-    
+  SuccessfulItemUnregister: '&aItem Set &e%ItemSet% &ahas been unregistered!'
