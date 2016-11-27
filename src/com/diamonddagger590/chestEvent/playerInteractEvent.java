@@ -71,14 +71,14 @@ public class playerInteractEvent implements Listener{
 						//stop player from opening chest
 						e.setCancelled(true);
 						//send user the inventory
-						Inventory inv = Bukkit.createInventory(null, 27, Main.color("&5" + e.getPlayer().getName() + "s Item"));
+						Inventory inv = Bukkit.createInventory(null, 27, Main.color(Main.listHandler.getConfig().getString("Titles.OpenedChest")));
 						inv.setItem(13, newItem);
 						e.getPlayer().openInventory(inv);
 
 
                         cal.add(Calendar.SECOND, cooldown);
 						Main.listHandler.getPlayers().set("Players." + UUID + "." + name + ".cooldownExpire", cal.getTimeInMillis());
-						e.getPlayer().sendMessage(Main.color("&aEnjoy your item!"));
+						e.getPlayer().sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemObtained")));
 						Main.listHandler.savePlayers();
 						return;
 						
@@ -87,13 +87,14 @@ public class playerInteractEvent implements Listener{
 						//cancel event
 						e.setCancelled(true);
 						int timeLeft = (int) (cooldownExpire.getTimeInMillis()/1000) - ((int) (cal.getTimeInMillis()/1000));
-						e.getPlayer().sendMessage(Main.color("&cYou can not open that chest until &a" + timeLeft + " &cseconds"));
+						String time = Integer.toString(timeLeft);
+						e.getPlayer().sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.CooldownNotOver").replace("%Cooldown%", time)));
 						return;
 						}
 					}
 					else{
 						e.setCancelled(true);
-						e.getPlayer().sendMessage(Main.color("&cYou don't have permission to open that chest."));
+						e.getPlayer().sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPermsChest")));
 						return;
 					}
 				}

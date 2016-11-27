@@ -185,12 +185,12 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								if(sender.hasPermission("ce.items.unregister") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
 									if(args.length < 3){
 										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
-										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemPrompt2")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt2")));
 										return true;
 									}
 									else{
 										Main.listHandler.getItems().set("Items." + args[2], null);
-										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.SuccessfulItemRegister")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.SuccessfulItemUnregister")));
 										Main.listHandler.saveItems();
 										return true;
 									}
@@ -201,7 +201,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
 									if(args.length < 3){
 										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
-										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Main.ItemPrompt2")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt2")));
 										return true;
 									}
 									else{
@@ -214,10 +214,10 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								}
 							}
 							if(args[1].equalsIgnoreCase("edit")){
-								if(sender.hasPermission("ce.items.view") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
+								if(sender.hasPermission("ce.items.edit") || sender.hasPermission("ce.items.*") || sender.hasPermission("ce.*")){
 									if(args.length < 3){
 										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt1")));
-										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Main.ItemPrompt2")));
+										sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemsPrompt2")));
 										return true;
 									}
 									else{
@@ -237,7 +237,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 								}
 								else{
 									Commands.unregisterChest(args[1]);
-									sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aCongrats, &e" + args[1] + " &ahas been unregistered"));
+									sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.SuccessfulUnregister").replace("%ChestName%", args[1])));
 									return true;
 								}
 							}
@@ -325,7 +325,7 @@ public boolean onCommand(CommandSender sender, Command cmd, String label, String
 				}
 			else{
 				//prompt the user
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&3Do /ce help for commands"));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Prompt")));
 				return true;
 			}
 		}

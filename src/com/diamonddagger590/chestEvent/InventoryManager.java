@@ -13,28 +13,28 @@ public abstract class InventoryManager extends BukkitRunnable{
 	public static void createItemSet(Player sender, String name){
 		//get users inv 
 		if(Main.listHandler.getItems().getConfigurationSection("Items.").getKeys(false) == null){
-			Inventory inv = Bukkit.createInventory(null, 27, Main.color("&7[&1ChestEvent&7]&6>>&a&lCreating ItemSet: " + name));
+			Inventory inv = Bukkit.createInventory(null, 27, Main.color(Main.listHandler.getConfig().getString("Titles.Creating").replace("%ItemSet%", name)));
 			Main.listHandler.getItems().set("Items." + name + ".Reset", 0);
 			Main.listHandler.saveItems();
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aCreating the inventory now... Put items you want into the inventory then close it"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.CreatingInventory")));
 			Bukkit.getServer().getScheduler().runTaskLater(plugin, new Runnable(){
 				public void run(){
 					sender.openInventory(inv);
 				}
 			}, 10);
 			sender.setCanPickupItems(false);
-			
-		}
-		
-		else if(!(Main.listHandler.getItems().getConfigurationSection("Items." + name).getKeys(false) == null)){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cItem set &e" + name + "&c already exists."));
 			return;
 		}
+		
+		//else if(!(Main.listHandler.getItems().getConfigurationSection("Items." + name).getKeys(false) == null)){
+			//sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemSetAlreadyExists")));
+			//return;
+		//}
 		else{
-			Inventory inv = Bukkit.createInventory(null, 27, Main.color("&7[&1ChestEvent&7]&6>>&a&lCreating ItemSet: " + name));
+			Inventory inv = Bukkit.createInventory(null, 27, Main.color(Main.listHandler.getConfig().getString("Titles.Creating").replace("%ItemSet%", name)));
 			Main.listHandler.getItems().set("Items." + name + ".Reset", 0);
 			Main.listHandler.saveItems();
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aCreating the inventory now... Put items you want into the inventory then close it"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.CreatingInventory")));
 			Bukkit.getServer().getScheduler().runTaskLater(plugin, new Runnable(){
 				public void run(){
 					sender.openInventory(inv);
@@ -45,11 +45,11 @@ public abstract class InventoryManager extends BukkitRunnable{
 	}
 	public static void viewItemSet(Player sender, String name){
 		if(!(Main.listHandler.getItems().contains("Items." + name))){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat ItemSet doesn't exist"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoItemSet")));
 			return;
 		}
 		else{
-			Inventory inv = Bukkit.createInventory(null, 27, Main.color("&a&lViewing ItemSet: " + name));
+			Inventory inv = Bukkit.createInventory(null, 27, Main.color(Main.listHandler.getConfig().getString("Titles.Viewing").replace("%ItemSet%", name)));
 			for(String itemNumber : Main.listHandler.getItems().getConfigurationSection("Items." + name).getKeys(true)){
 				ItemStack i = Main.listHandler.getItems().getItemStack("Items." + name + "." + itemNumber);
 				int emptyslot = inv.firstEmpty();
@@ -60,11 +60,11 @@ public abstract class InventoryManager extends BukkitRunnable{
 	}
 	public static void editItemSet(Player sender, String name){
 		if(!(Main.listHandler.getItems().contains("Items." + name))){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat ItemSet doesn't exist"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoItemSet")));
 			return;
 		}
 		else{
-			Inventory inv = Bukkit.createInventory(null, 27, Main.color("&a&lEditing ItemSet: " + name));
+			Inventory inv = Bukkit.createInventory(null, 27, Main.color("&a&lEditing ItemSet " + name));
 			for(String itemNumber : Main.listHandler.getItems().getConfigurationSection("Items." + name).getKeys(true)){
 				ItemStack i = Main.listHandler.getItems().getItemStack("Items." + name + "." + itemNumber);
 				int emptyslot = inv.firstEmpty();

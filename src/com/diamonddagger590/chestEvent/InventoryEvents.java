@@ -5,9 +5,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +18,7 @@ public class InventoryEvents implements Listener{
 		Player player = (Player) e.getPlayer();
 		Inventory inv = e.getInventory();
 		if(inv.getTitle() != null){
-			if(ChatColor.stripColor(inv.getTitle()).equalsIgnoreCase(e.getPlayer().getName() + "s Item")){
+			if(ChatColor.stripColor(inv.getTitle()).equalsIgnoreCase(Main.listHandler.getConfig().getString("Titles.OpenedChest"))){
 				for(int itemnumber = 0; itemnumber < inv.getSize(); itemnumber++){
 					if(!(inv.getItem(itemnumber) == null)){
 						ItemStack item = inv.getItem(itemnumber);
@@ -43,7 +40,9 @@ public class InventoryEvents implements Listener{
 				return;
 			}
 			for(String itemSet : Main.listHandler.getItems().getConfigurationSection("Items").getKeys(false)){
+				e.getPlayer().sendMessage("1");
 				if(ChatColor.stripColor(inv.getTitle()).equalsIgnoreCase("Creating ItemSet: " + itemSet)){
+					e.getPlayer().sendMessage("2");
 					player.setCanPickupItems(true);
 					for(ItemStack i : e.getInventory().getContents()){
 						
@@ -75,17 +74,20 @@ public class InventoryEvents implements Listener{
 						}
 					}
 					
-					e.getPlayer().sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aItem file saved!"));
+					e.getPlayer().sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemSetSaved")));
 				} 
 				if(ChatColor.stripColor(inv.getTitle()).equalsIgnoreCase("Editing ItemSet: " + itemSet)){
 					player.setCanPickupItems(true);
+					player.sendMessage("2");
 					Main.listHandler.getItems().set("Items." + itemSet, null);
+					
 					for(ItemStack i : e.getInventory().getContents()){
-						
+						player.sendMessage("3");
 						if((i!=null)){
-							
+							player.sendMessage("4");
 							times++;
 							Main.listHandler.getItems().set("Items." + itemSet + ".ItemNumber_" + times, i);
+							continue;
 						}
 						else{
 							continue;
@@ -95,7 +97,7 @@ public class InventoryEvents implements Listener{
 					Main.listHandler.getItems().set("Items." + itemSet + ".TotalItems", times);
 					times = 0;
 					Main.listHandler.saveItems();					
-					e.getPlayer().sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&aItem file saved!"));
+					e.getPlayer().sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.ItemSetSaved")));
 					} 
 				else{
 					continue;

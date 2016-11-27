@@ -36,7 +36,7 @@ public class Commands {
 	}
 	public static void listCrates(Player sender){
 		if(Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false) == null){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThere are no chests registered"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoChestsRegistered")));
 			return;
 		}
 		else{
@@ -60,35 +60,35 @@ public class Commands {
 			Location loc1 = new Location(w, x, y + 1, z);
 			Location loc2 = new Location(w, x, y + 2, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Teleporting").replace("%Chest%", name)));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x + 1, y, z);
 			loc2 = new Location(w, x + 1, y + 1, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Teleporting").replace("%Chest%", name)));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x - 1, y, z);
 			loc2 = new Location(w, x - 1, y + 1, z);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Teleporting").replace("%Chest%", name)));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x, y, z + 1);
 			loc2 = new Location(w, x, y + 1, z + 1);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Teleporting").replace("%Chest%", name)));
 				sender.teleport(loc1);
 				return;
 			}
 			loc1 = new Location(w, x, y, z - 1);
 			loc2 = new Location(w, x, y + 1, z - 1);
 			if(loc1.getBlock().getType()==Material.AIR && loc2.getBlock().getType()==Material.AIR){
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&bTeleporting you to " + name));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.Teleporting").replace("%Chest%", name)));
 				sender.teleport(loc1);
 				return;
 			}
@@ -107,33 +107,33 @@ public class Commands {
 		}
 		//error msg
 		else{
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThe chest " + name + " is not registered. If you believe this to be an error please contact an admin or dev"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotRegistered").replace("%Chest%", name)));
 			return;
 		}
 	}
 	@SuppressWarnings("deprecation")
 	public static void cooldownSet(Player sender, String target, String cooldown, String chest){
 		if(!(sender.hasPermission("ce.cooldowns"))){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cYou do not have permission to run this command"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoPerms")));
 			return;
 		}
 		else if((Bukkit.getPlayer(target)) == null){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat player doesn't exist or is not online."));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotOnline")));
 			return;
 		}
 		Player player = Bukkit.getPlayer(target);
 		if(Main.listHandler.getChestLocation().getConfigurationSection("Locations").getKeys(false) == null){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThere are no registered chests."));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NoChestsRegistered")));
 			return;
 		}
 		else if(!Main.listHandler.getPlayers().contains("Players." + player.getUniqueId())){
-			sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cThat player is not registered or does not exist"));
+			sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotRegisteredPlayer")));
 			return;
 		}
 		else if(Main.listHandler.getPlayers().contains("Players." + player.getUniqueId())){
 			if(Main.listHandler.getPlayers().contains("Players." + player.getUniqueId() + "." + chest + ".cooldownExpire")){
 				if(!Main.isInt(cooldown)){
-					sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&cPlease use the format of /ce cooldown <target> <cooldown> <chest>"));
+					sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.CooldownPrompt")));
 					return;
 				}
 				else{
@@ -142,14 +142,14 @@ public class Commands {
 					Calendar cal = Calendar.getInstance();
 					cal.add(Calendar.SECOND, cool);
 					int timeLeft = (int) (cal.getTimeInMillis()/1000) - ((int) (current.getTimeInMillis()/1000));
-					sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&a" + target + "s cooldown has been set to &e" + timeLeft + "&a from now."));
+					sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.CooldownSet").replace("%Player%", target).replaceAll("%Cooldown%", Integer.toString(timeLeft))));
 					Main.listHandler.getPlayers().set("Players." + player.getUniqueId() + "." + chest + ".cooldownExpire", cal.getTimeInMillis());
 					Main.listHandler.savePlayers();
 					return;
 				}
 			}
 			else{
-				sender.sendMessage(Main.color("&7[&1ChestEvent&7]&6>>&e" + chest + "&c is not registered for &e" + target));
+				sender.sendMessage(Main.color(Main.listHandler.getConfig().getString("PluginPrefix") + Main.listHandler.getConfig().getString("Messages.NotOpenedYet").replace("%Player%", target)));
 				return;
 			}
 		}
